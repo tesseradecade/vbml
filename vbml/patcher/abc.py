@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from vbml.validator.map import ValidatorsMap
 import typing
 
 if typing.TYPE_CHECKING:
@@ -6,15 +7,16 @@ if typing.TYPE_CHECKING:
 
 
 class ABCPatcher(ABC):
-    @abstractmethod
     def __init__(
         self,
         disable_validators: bool = False,
-        validators_map: typing.Optional[bool] = None,
+        validators_map: ValidatorsMap = ValidatorsMap(),
     ):
         self.disable_validators = disable_validators
         self.validators_map = validators_map
 
     @abstractmethod
-    def check(self, text: str, pattern: "ABCPattern", ignore_validation: bool = False):
+    def check(
+        self, pattern: "ABCPattern", text: str, ignore_validation: bool = False
+    ) -> typing.Union[bool, dict]:
         pass

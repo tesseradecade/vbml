@@ -8,6 +8,7 @@ ArgumentPattern = Union[str, NoReturn]
 def syntax_for(syntax_char: str):
     def decorator(func: Callable[["Syntax", SyntaxArgument], Union[ArgumentPattern, dict]]):
         return syntax_char, func
+
     return decorator
 
 
@@ -79,4 +80,6 @@ class Syntax:
         return RecursionArgument(arg.inclusion, {"text": pattern})
 
     def get_syntax(self, char: str) -> Callable[[SyntaxArgument], ArgumentPattern]:
-        return {v[0]: v[1] for k, v in self.__class__.__dict__.items() if isinstance(v, tuple)}[char]
+        return {v[0]: v[1] for k, v in self.__class__.__dict__.items() if isinstance(v, tuple)}[
+            char
+        ]

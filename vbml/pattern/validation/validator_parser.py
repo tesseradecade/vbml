@@ -45,7 +45,7 @@ def get_validators(
                 )
                 validated[validator] = arguments
 
-            new_validators.append(Validator(validated, nested))
+            new_validators.append(Validator(argument_name, validated, nested))
     return new_validators
 
 

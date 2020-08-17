@@ -40,6 +40,7 @@ class Pattern(ABCPattern):
 
         # Parse arguments and save validators
         self.validators = get_validators(validated_arguments, nestings)
+        self.validation = {p.name: p.validation for p in self.validators}
 
         # Delete arguments from text
         text = re.sub(syntax.ARGS_DELETE, syntax.ARGUMENT, text)

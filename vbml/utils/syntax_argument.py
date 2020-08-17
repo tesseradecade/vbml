@@ -17,5 +17,6 @@ class RecursionArgument:
 
 @dataclass
 class Validator:
+    name: str
     validation: dict
     nested: dict
