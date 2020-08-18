@@ -6,10 +6,7 @@ import typing
 
 class Patcher(ABCPatcher):
     def check(
-        self,
-        pattern: Pattern,
-        text: str,
-        ignore_validation: bool = False
+        self, pattern: Pattern, text: str, ignore_validation: bool = False
     ) -> typing.Union[bool, dict]:
         check = pattern.parse(text)
 
@@ -50,4 +47,3 @@ class Patcher(ABCPatcher):
 
         pattern.pregmatch = valid_keys
         return valid_keys
-

@@ -56,7 +56,7 @@ class Syntax:
 
     @syntax_for(IGNORE)
     def ignore(self, arg: SyntaxArgument) -> ArgumentPattern:
-        if arg.inclusion or arg.name:
+        if arg.inclusion or arg.name.strip(IGNORE):
             raise PatternError("Inclusion and name in ignore-argument are forbidden")
         return "(?:.*?)"
 
@@ -67,6 +67,7 @@ class Syntax:
     @staticmethod
     def recursion_arg(arg: SyntaxArgument) -> RecursionArgument:
         pattern = arg.inclusion
+        print(arg)
 
         # [legacy] 0.5.93
         if pattern.startswith('"') and pattern.endswith('"'):

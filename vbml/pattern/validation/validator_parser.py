@@ -53,8 +53,11 @@ def get_inclusion(argument: str) -> typing.Optional[str]:
     inclusion: typing.List[str] = re.findall(
         r"^\((.*?)\)[a-zA-Z0-9_" + "".join(SYNTAX_CHARS) + "]+[:]?.*?$", argument
     )
+    print(argument, inclusion)
 
     if len(inclusion):
+        inclusion = inclusion[0]
+
         if inclusion[0] == "\\n":
             inclusion[0] = "\n"
         return inclusion

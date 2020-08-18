@@ -73,6 +73,7 @@ class Pattern(ABCPattern):
                 raise PatternError("Argument cannot be empty")
             elif argument.startswith(syntax.RECURSION):
                 self.recursions[argument] = self.syntax.recursion_arg(syntax_argument)
+                print(self.recursions)
 
             if argument[0] in syntax.SYNTAX_CHARS:
                 text = text.replace(

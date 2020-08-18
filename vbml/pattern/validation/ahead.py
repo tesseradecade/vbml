@@ -27,7 +27,7 @@ class AheadValidation:
                 union_name = inclusion.strip(UNION)
                 groupdict[union_name] = [
                     argument
-                    for argument in groupdict[union_name].split(self.inclusions[inclusion][0])
+                    for argument in groupdict[union_name].split(self.inclusions[inclusion])
                     if argument
                 ]
             elif inclusion.startswith(RECURSION):
