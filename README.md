@@ -1,4 +1,17 @@
-# vbml - perfect pythonistic parser / string manipulator :sparkles:
+<p align="center">
+  <a href="https://github.com/tesseradecade/vbml">
+    <img src="/logo.jpeg" width="200px" style="display: inline-block;">
+  </a>
+</p>
+<h1 align="center">
+  [VBML] perfect pythonistic parser / string manipulator :sparkles:
+</h1>
+<p align="center">
+  <img alt="PyPI - License" src="https://img.shields.io/pypi/l/vbml?style=flat-square">
+  <img alt="PyPI - Downloads" src="https://img.shields.io/pypi/dw/vbml?style=flat-square">
+  <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/tesseradecade/vbml?style=flat-square">
+  <img alt="GitHub issues by-label" src="https://img.shields.io/github/issues/tesseradecade/vbml/bug?style=flat-square">
+</p>
 
 ## Features
 
@@ -38,7 +51,7 @@ poetry install
 poetry run pytest
 ```
 
-## Documentation
+## :book: Documentation
 
 Full documentation is available in [docs/index.md](/docs/index.md)
 
@@ -59,4 +72,5 @@ result2 # False
 result3 # False
 ```
 
+Leave a :star: if this project helped you  
 Made with :heart: by [timoniq](https://github.com/timoniq)
