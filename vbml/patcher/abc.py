@@ -45,10 +45,10 @@ class ABCPatcher(ABC):
                 validator = FuncBasedValidator(
                     key or validator_handler.__name__, validator_handler
                 )
-            elif isinstance(validator_handler, ABCValidator):
+            elif issubclass(validator_handler, ABCValidator):  # type: ignore
                 if key is not None:
                     validator_handler.key = key
-                validator = validator_handler()
+                validator = validator_handler()  # type: ignore
             else:
                 raise VBMLError("Validator's type is undefined")
 
