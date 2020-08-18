@@ -3,6 +3,8 @@ import typing
 
 
 class FuncBasedValidator(ABCValidator):
+    """ Implement the ability to make validators from functions """
+
     def __init__(self, key: str, func: FuncBasedValidatorCallable):
         self.key = key
         self.func = func

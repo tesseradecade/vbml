@@ -6,14 +6,23 @@ ArgumentPattern = Union[str, NoReturn]
 
 
 def syntax_for(syntax_char: str):
+    """ Decorate argument shift handlers """
+
     def decorator(func: Callable[["Syntax", SyntaxArgument], Union[ArgumentPattern, dict]]):
         return syntax_char, func
+
     return decorator
 
 
 class Syntax:
+    """ Process argument shifts with given syntax-char
+    get_syntax(syntax_char) returns shift argument handler
+    Handlers are decorated with @syntax_for(syntax_char)
+    """
+
     @syntax_for(UNION)
     def union(self, arg: SyntaxArgument) -> ArgumentPattern:
+        """ UNION - splits value afterwards with given inclusion """
         if not len(arg.name.strip(UNION)):
             raise PatternError("Union argument should be named")
 
@@ -22,6 +31,7 @@ class Syntax:
 
     @syntax_for(ONE_CHAR)
     def one_char(self, arg: SyntaxArgument) -> ArgumentPattern:
+        """ ONE_CHAR - every symbol of inclusion is possible char to be taken """
         if not len(arg.name.strip(ONE_CHAR)):
             raise PatternError("Char argument should be named")
 
@@ -34,6 +44,7 @@ class Syntax:
 
     @syntax_for(EXCEPT)
     def except_(self, arg: SyntaxArgument) -> ArgumentPattern:
+        """ EXCEPT - approve value if it doesnt contain any symbol from inclusion """
         if not arg.inclusion:
             raise PatternError(
                 "Except argument expression have to contain not less than one symbol in inclusion"
@@ -47,6 +58,7 @@ class Syntax:
 
     @syntax_for(REGEX)
     def regex(self, arg: SyntaxArgument) -> ArgumentPattern:
+        """ REGEX - inclusion is regex """
         if not arg.inclusion:
             raise PatternError(
                 "Regex argument expression have to contain not less than one symbol in inclusion"
@@ -61,10 +73,12 @@ class Syntax:
 
     @syntax_for(RECURSION)
     def recursion(self, arg: SyntaxArgument) -> ArgumentPattern:
+        """ RECURSION - schema inside the inclusion creates new pattern """
         return "(?P<" + arg.name.strip(RECURSION) + ">" + ".*" + ")"
 
     @staticmethod
     def recursion_arg(arg: SyntaxArgument) -> RecursionArgument:
+        """ Makes inner pattern data to handle ahead the parsing """
         pattern = arg.inclusion
 
         # [legacy] 0.5.93
@@ -80,6 +94,10 @@ class Syntax:
         return RecursionArgument(pattern, {"text": pattern})
 
     def get_syntax(self, char: str) -> Callable[["Syntax", SyntaxArgument], ArgumentPattern]:
+        """ Find shift argument handler by syntax char
+        :param char: syntax char
+        :return: shift argument handler
+        """
         return {v[0]: v[1] for k, v in self.__class__.__dict__.items() if isinstance(v, tuple)}[
             char
         ]

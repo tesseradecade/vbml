@@ -8,6 +8,10 @@ import re
 
 
 class Pattern(ABCPattern):
+    """ Main patcher to parse and validate
+    Pattern documentation: https://github.com/tesseradecade/vbml/blob/master/docs/pattern.md
+    """
+
     def __init__(
         self,
         text: str,
@@ -62,7 +66,7 @@ class Pattern(ABCPattern):
 
         self.arguments: typing.List[str] = re.findall(syntax.ARGS_NAME_FINDALL, text)
         self.inclusions = dict(zip(self.arguments, inclusions))
-        self.recursions: typing.Dict[str, RecursionArgument] = dict()
+        self.recursions: typing.Dict[str, RecursionArgument] = {}
 
         # Add escape symbols
         text = text.translate(syntax.ESCAPE)

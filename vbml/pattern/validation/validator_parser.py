@@ -11,6 +11,11 @@ def get_validators(
     validated_arguments: typing.List[typing.Tuple[str, str]],
     impl_nestings: typing.Optional[typing.Dict[str, typing.Callable[[str], typing.Any]]] = None,
 ) -> typing.List[Validator]:
+    """ Get validators from validated arguments including validator's arguments
+    :param validated_arguments: [(argument_full_pattern, selected_argument_name), ...]
+    :param impl_nestings: post validators called nestings derived to the pattern
+    :return: list of validators
+    """
 
     if not impl_nestings:
         impl_nestings = {}
@@ -50,17 +55,22 @@ def get_validators(
 
 
 def get_inclusion(argument: str) -> typing.Optional[str]:
+    """ Get inclusion from argument
+    :param argument: raw argument
+    :return: Optional[inclusion]
+    """
     inclusion_list: typing.List[str] = re.findall(
         r"^\((.*?)\)[a-zA-Z0-9_" + "".join(SYNTAX_CHARS) + "]+[:]?.*?$", argument
     )
 
-    if len(inclusion_list):
+    if inclusion_list:
         inclusion: str = inclusion_list[0].replace("\\n", "\n")
         return inclusion
     return None
 
 
 def add_inclusion(inclusions: dict, group_dict: dict) -> typing.Dict[str, str]:
+    """ Add inclusion as prefix """
     for argument in group_dict:
         if inclusions.get(argument) is not None:
             group_dict[argument] = inclusions[argument] + group_dict[argument]

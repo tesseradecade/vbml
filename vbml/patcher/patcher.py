@@ -5,6 +5,10 @@ import typing
 
 
 class Patcher(ABCPatcher):
+    """ Main patcher to parse and validate
+    Patcher documentation: https://github.com/tesseradecade/vbml/blob/master/docs/patcher.md
+    """
+
     def check(
         self, pattern: Pattern, text: str, ignore_validation: bool = False
     ) -> typing.Optional[typing.Union[typing.Dict[typing.Any, typing.Any], bool]]:
@@ -39,8 +43,7 @@ class Patcher(ABCPatcher):
                     if valid is None:
                         valid_keys = None
                         break
-                    else:
-                        valid_keys[key] = valid
+                    valid_keys[key] = valid
 
             elif valid_keys is not None:
                 valid_keys[key] = keys[key]

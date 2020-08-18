@@ -4,6 +4,8 @@ import re
 
 
 class IntValidator(ABCValidator):
+    """ Check if value can be formally converted to integer """
+
     key = "int"
 
     def check(self, value: str, *args) -> typing.Optional[int]:
@@ -12,6 +14,8 @@ class IntValidator(ABCValidator):
 
 
 class FloatValidator(ABCValidator):
+    """ Check if value can be formally converted to float """
+
     key = "float"
 
     def check(self, value: str, *args) -> typing.Optional[float]:

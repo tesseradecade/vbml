@@ -1,7 +1,8 @@
-from typing import Sequence, List, Any
+from typing import List, Any
 
 
 def flatten(from_list: List[Any]) -> List[Any]:
+    """ Flatten List[str] """
     flattened_list = []
     for item in from_list:
         if not isinstance(item, str):

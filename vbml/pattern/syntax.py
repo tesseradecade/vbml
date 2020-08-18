@@ -1,8 +1,16 @@
+""" VBML Syntax constants
+UNION - splits value afterwards with given inclusion
+ONE_CHAR - every symbol of inclusion is possible char to be taken
+EXCEPT - approve value if it doesnt contain any symbol from inclusion
+REGEX - inclusion is regex
+RECURSION - schema inside the inclusion creates new pattern
+"""
+
 from typing import Tuple
 from re import compile
 import re
 
-# Arg-type syntax
+# Syntax Chars
 
 UNION = "*"
 ONE_CHAR = "^"
