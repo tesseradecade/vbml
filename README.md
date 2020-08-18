@@ -15,7 +15,7 @@
 
 ## Features
 
-* Fast `regex`-based parser
+* Clean `regex`-based parser
 * Easy-to-understand validators / Custom validators
 * Lots of features out-of-box
 
