@@ -22,6 +22,26 @@ Or with poetry:
 poetry add vbml
 ```
 
+## Run tests
+
+Clone repo from git:
+
+```shell script
+git clone https://github.com/tesseradecade/vbml.git
+```
+
+Go to repository and run tests with `poetry`:
+
+```shell script
+cd vbml
+poetry install
+poetry run pytest
+```
+
+## Documentation
+
+Full documentation is available in [docs/index.md](/docs/index.md)
+
 ## Simple example
 
 ```python

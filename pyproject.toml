@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vbml"
-version = "0.1"
+version = "1.0"
 description = "Way to check, match & resist. Sofisticated object oriented regex-based text parser"
 authors = ["timoniq"]
 license = "MIT"
