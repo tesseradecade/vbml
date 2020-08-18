@@ -13,7 +13,7 @@ RECURSION = "&"
 
 # Constants
 
-SYNTAX_CHARS: Tuple[str] = (UNION, ONE_CHAR, EXCEPT, REGEX, IGNORE, RECURSION)
+SYNTAX_CHARS: Tuple[str, ...] = (UNION, ONE_CHAR, EXCEPT, REGEX, IGNORE, RECURSION)
 ESCAPE = {ord(x): "\\" + x for x in r"\.*+?()[]|^${}&"}
 
 # Regex patterns

@@ -7,7 +7,7 @@ import typing
 class Patcher(ABCPatcher):
     def check(
         self, pattern: Pattern, text: str, ignore_validation: bool = False
-    ) -> typing.Union[bool, dict]:
+    ) -> typing.Optional[typing.Union[typing.Dict[typing.Any, typing.Any], bool]]:
         check = pattern.parse(text)
 
         if ignore_validation:

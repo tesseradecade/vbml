@@ -10,7 +10,7 @@ VALIDATOR_ARGUMENT = r"\[(.+)+\]"
 def get_validators(
     validated_arguments: typing.List[typing.Tuple[str, str]],
     impl_nestings: typing.Optional[typing.Dict[str, typing.Callable[[str], typing.Any]]] = None,
-) -> typing.Union[typing.List[Validator], typing.NoReturn]:
+) -> typing.List[Validator]:
 
     if not impl_nestings:
         impl_nestings = {}
@@ -50,21 +50,17 @@ def get_validators(
 
 
 def get_inclusion(argument: str) -> typing.Optional[str]:
-    inclusion: typing.List[str] = re.findall(
+    inclusion_list: typing.List[str] = re.findall(
         r"^\((.*?)\)[a-zA-Z0-9_" + "".join(SYNTAX_CHARS) + "]+[:]?.*?$", argument
     )
-    print(argument, inclusion)
 
-    if len(inclusion):
-        inclusion = inclusion[0]
-
-        if inclusion[0] == "\\n":
-            inclusion[0] = "\n"
+    if len(inclusion_list):
+        inclusion: str = inclusion_list[0].replace("\\n", "\n")
         return inclusion
-    return
+    return None
 
 
-def add_inclusion(inclusions: dict, group_dict: dict) -> dict:
+def add_inclusion(inclusions: dict, group_dict: dict) -> typing.Dict[str, str]:
     for argument in group_dict:
         if inclusions.get(argument) is not None:
             group_dict[argument] = inclusions[argument] + group_dict[argument]

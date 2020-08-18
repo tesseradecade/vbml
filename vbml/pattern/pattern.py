@@ -10,7 +10,7 @@ import re
 class Pattern(ABCPattern):
     def __init__(
         self,
-        text: typing.Optional[str] = None,
+        text: str,
         regex: str = "{}$",
         lazy: bool = True,
         flags: typing.Optional[re.RegexFlag] = None,
@@ -30,20 +30,22 @@ class Pattern(ABCPattern):
         context["nestings"] = nestings
 
         # Find all validated arguments
+        validated_arguments: typing.List[typing.Tuple[str, str]]
+
         if context["default_validators"] is not None:
             validated_arguments = [
                 (arg[0][0:-1] + ":" + ":".join(context["default_validators"]) + ">", arg[1])
-                for arg in re.findall(syntax.ARGS_FINDALL, text)
+                for arg in syntax.ARGS_FINDALL.findall(text)
             ]
         else:
-            validated_arguments = re.findall(syntax.TYPED_ARGS_FINDALL, text)
+            validated_arguments = syntax.TYPED_ARGS_FINDALL.findall(text)
 
         # Parse arguments and save validators
         self.validators = get_validators(validated_arguments, nestings)
         self.validation = {p.name: p.validation for p in self.validators}
 
         # Delete arguments from text
-        text = re.sub(syntax.ARGS_DELETE, syntax.ARGUMENT, text)
+        text = syntax.ARGS_DELETE.sub(syntax.ARGUMENT, text)
 
         # Save inclusion from text
         inclusions: typing.List[typing.Optional[str]] = context.get("inclusions") or [
@@ -51,7 +53,7 @@ class Pattern(ABCPattern):
         ]
 
         # Delete inclusion from text
-        text = re.sub(syntax.INCLUSION_DELETE, syntax.ARGUMENT, text)
+        text = syntax.INCLUSION_DELETE.sub(syntax.ARGUMENT, text)
 
         # Add representation
         self.representation: str = re.sub(
@@ -101,7 +103,7 @@ class Pattern(ABCPattern):
         self.pregmatch = self.ahead.get_groupdict(match)
         return self.pregmatch is not None
 
-    def dict(self) -> typing.Union[dict, typing.NoReturn]:
+    def dict(self) -> dict:
         if self.pregmatch is None:
             raise ParseError("Not matched or failed")
         return self.pregmatch

@@ -14,5 +14,5 @@ class ABCPattern(ABC):
         pass
 
     @abstractmethod
-    def dict(self) -> typing.Union[dict, typing.NoReturn]:
+    def dict(self) -> dict:
         pass

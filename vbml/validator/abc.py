@@ -1,9 +1,12 @@
 from abc import ABC, abstractmethod
 import typing
-from typing_extensions import Protocol
+from typing_extensions import Protocol, runtime_checkable
 
 
+@runtime_checkable
 class FuncBasedValidatorCallable(Protocol):
+    key: typing.Optional[str] = None
+
     def __call__(self, value: str, *args: typing.Any) -> typing.Optional[typing.Any]:
         ...
 

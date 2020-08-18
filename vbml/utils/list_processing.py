@@ -1,10 +1,10 @@
-from typing import Sequence
+from typing import Sequence, List, Any
 
 
-def flatten(from_list: list) -> list:
+def flatten(from_list: List[Any]) -> List[Any]:
     flattened_list = []
     for item in from_list:
-        if isinstance(item, Sequence) and not isinstance(item, str):
+        if not isinstance(item, str):
             flattened_list.extend(flatten(item))
         else:
             flattened_list.append(item)

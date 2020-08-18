@@ -3,13 +3,13 @@ from vbml.pattern.syntax import UNION, RECURSION
 from vbml.utils.syntax_argument import RecursionArgument, Validator
 
 if typing.TYPE_CHECKING:
-    from vbml.pattern.abc import ABCPattern
+    from vbml.pattern import Pattern
 
 
 class AheadValidation:
     def __init__(
         self,
-        pattern: "ABCPattern",
+        pattern: typing.Type["Pattern"],
         inclusions: typing.Dict[str, typing.Optional[str]],
         validators: typing.List[Validator],
         recursions: typing.Dict[str, RecursionArgument],
@@ -17,9 +17,9 @@ class AheadValidation:
         self.inclusions = inclusions
         self.recursions = recursions
         self.validators = validators
-        self.pattern: typing.Type["ABCPattern"] = type(pattern)
+        self.pattern = pattern
 
-    def get_groupdict(self, match) -> typing.Union[dict, None]:
+    def get_groupdict(self, match) -> typing.Optional[dict]:
         groupdict: dict = match.groupdict()
 
         for inclusion in self.inclusions:
@@ -36,10 +36,11 @@ class AheadValidation:
                 if pattern.parse(groupdict[name]):
                     groupdict.update({name: pattern.dict()})
                 else:
-                    return
+                    return None
 
         [
-            groupdict.update(self.validators[validator].nested[nested](groupdict) or {})
+            groupdict.update(
+                self.validators[validator].nested[nested](groupdict) or {})  # type: ignore
             for validator in self.validators
             for nested in validator.nested
         ]

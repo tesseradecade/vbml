@@ -133,3 +133,9 @@ dmypy.json
 .db
 *.db-shm
 *.db-wal
+
+# pytest
+.pytest_cache
+
+# poetry lock files
+poetry.lock

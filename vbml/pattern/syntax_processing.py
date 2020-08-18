@@ -8,7 +8,6 @@ ArgumentPattern = Union[str, NoReturn]
 def syntax_for(syntax_char: str):
     def decorator(func: Callable[["Syntax", SyntaxArgument], Union[ArgumentPattern, dict]]):
         return syntax_char, func
-
     return decorator
 
 
@@ -67,20 +66,20 @@ class Syntax:
     @staticmethod
     def recursion_arg(arg: SyntaxArgument) -> RecursionArgument:
         pattern = arg.inclusion
-        print(arg)
 
         # [legacy] 0.5.93
-        if pattern.startswith('"') and pattern.endswith('"'):
+        if pattern is not None and pattern.startswith('"') and pattern.endswith('"'):
             pattern = pattern[1:-1]
 
-        if not arg.inclusion:
+        if not pattern:
             raise PatternError(
-                "Recursion argument expression have to contain not less than one symbol in inclusion"
+                "Recursion argument expression have to contain "
+                "not less than one symbol in inclusion"
             )
 
-        return RecursionArgument(arg.inclusion, {"text": pattern})
+        return RecursionArgument(pattern, {"text": pattern})
 
-    def get_syntax(self, char: str) -> Callable[[SyntaxArgument], ArgumentPattern]:
+    def get_syntax(self, char: str) -> Callable[["Syntax", SyntaxArgument], ArgumentPattern]:
         return {v[0]: v[1] for k, v in self.__class__.__dict__.items() if isinstance(v, tuple)}[
             char
         ]
