@@ -53,7 +53,7 @@ poetry run pytest
 
 ## :book: Documentation
 
-Full documentation is available in [docs/index.md](/docs/index.md)
+Full documentation contents are available in [docs/index.md](/docs/index.md)
 
 ## Simple example
 
@@ -68,8 +68,8 @@ result2 = patcher.check(pattern, "He is silly like he has right just turned t3n 
 result3 = patcher.check(pattern, "Haha regex go brrr")
 
 result1 # {"description": "so spontaneous", "age": 10}
-result2 # False
-result3 # False
+result2 # None
+result3 # None
 ```
 
 Leave a :star: if this project helped you  
