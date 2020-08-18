@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "vbml"
 version = "0.1"
-description = "Way to check, match and resist. Sofisticated object oriented regex-based text parser"
+description = "Way to check, match & resist. Sofisticated object oriented regex-based text parser"
 authors = ["timoniq"]
 license = "MIT"
 readme = "README.md"
@@ -24,7 +24,6 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.7"
-
 typing_extensions = "^3.7.4"
 
 [tool.poetry.dev-dependencies]
@@ -47,9 +46,6 @@ markdown-include = "^0.5.1"
 pytest = "^5.4"
 pytest-cov = "^2.8"
 pytest-asyncio = "^0.10.0"
-
-[tool.poetry.extras]
-
 
 [tool.black]
 line-length = 99
