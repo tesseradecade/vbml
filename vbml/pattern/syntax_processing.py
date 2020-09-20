@@ -65,6 +65,12 @@ class Syntax:
             )
         return arg.inclusion
 
+    @syntax_for(ANYTHING)
+    def anything(self, arg: SyntaxArgument) -> ArgumentPattern:
+        if arg.inclusion or arg.name.strip(ANYTHING):
+            raise PatternError("Inclusion and name in anything-argument are forbidden")
+        return "(?:.+)"
+
     @syntax_for(IGNORE)
     def ignore(self, arg: SyntaxArgument) -> ArgumentPattern:
         if arg.inclusion or arg.name.strip(IGNORE):
