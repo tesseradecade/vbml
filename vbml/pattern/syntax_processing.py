@@ -31,7 +31,7 @@ class Syntax:
 
     @syntax_for(ONE_CHAR)
     def one_char(self, arg: SyntaxArgument) -> ArgumentPattern:
-        """ ONE_CHAR - every symbol of inclusion is possible char to be taken """
+        """ ONE_CHAR - every symbol of inclusion is single char processed """
         if not len(arg.name.strip(ONE_CHAR)):
             raise PatternError("Char argument should be named")
 
@@ -44,10 +44,10 @@ class Syntax:
 
     @syntax_for(EXCEPT)
     def except_(self, arg: SyntaxArgument) -> ArgumentPattern:
-        """ EXCEPT - approve value if it doesnt contain any symbol from inclusion """
+        """ EXCEPT - approves value if it doesnt contain any symbol from inclusion """
         if not arg.inclusion:
             raise PatternError(
-                "Except argument expression have to contain not less than one symbol in inclusion"
+                "Except argument expression has to contain not less than one symbol in inclusion"
             )
         elif not len(arg.name.strip(EXCEPT)):
             raise PatternError("Except expression should be named")
@@ -61,7 +61,7 @@ class Syntax:
         """ REGEX - inclusion is regex """
         if not arg.inclusion:
             raise PatternError(
-                "Regex argument expression have to contain not less than one symbol in inclusion"
+                "Regex argument expression has to contain not less than one symbol in inclusion"
             )
         return arg.inclusion
 
@@ -84,7 +84,7 @@ class Syntax:
 
     @staticmethod
     def recursion_arg(arg: SyntaxArgument) -> RecursionArgument:
-        """ Makes inner pattern data to handle ahead the parsing """
+        """ Makes inner pattern data to handle ahead of parsing """
         pattern = arg.inclusion
 
         # [legacy] 0.5.93
@@ -93,7 +93,7 @@ class Syntax:
 
         if not pattern:
             raise PatternError(
-                "Recursion argument expression have to contain "
+                "Recursion argument expression has to contain "
                 "not less than one symbol in inclusion"
             )
 
