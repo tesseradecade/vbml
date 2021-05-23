@@ -4,7 +4,7 @@
   </a>
 </p>
 <h1 align="center">
-  [VBML] perfect pythonistic parser / string manipulator :sparkles:
+  VBML - perfect pythonistic parser / string manipulator :sparkles:
 </h1>
 <p align="center">
   <img alt="PyPI - License" src="https://img.shields.io/pypi/l/vbml?style=flat-square">
@@ -61,16 +61,16 @@ Full documentation contents are available in [docs/index.md](/docs/index.md)
 from vbml import Patcher, Pattern
 
 patcher = Patcher()
-pattern = Pattern("He is <description> like he has right just turned <age:int> years old")
+pattern = Pattern("I have <amount:int> apples. They are <adj>")
 
-result1 = patcher.check(pattern, "He is so spontaneous like he has right just turned 10 years old")
-result2 = patcher.check(pattern, "He is silly like he has right just turned t3n years old")
-result3 = patcher.check(pattern, "Haha regex go brrr")
+result1 = patcher.check(pattern, "I have 3 apples. They are green")
+result2 = patcher.check(pattern, "I have three apples. They are green")
+result3 = patcher.check(pattern, "Something irrelevant")
 
-result1 # {"description": "so spontaneous", "age": 10}
+result1 # {"amount": 3, "adj": "green"}
 result2 # None
 result3 # None
 ```
 
-Leave a :star: if this project helped you  
-Made with :heart: by [timoniq](https://github.com/timoniq)
+Leave a star if this project helped you  
+Made by [timoniq](https://github.com/timoniq)
