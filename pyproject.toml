@@ -24,7 +24,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.7"
-typing_extensions = "^3.7.4"
+typing_extensions = "*"
 
 [tool.poetry.dev-dependencies]
 # Lint
