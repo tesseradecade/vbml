@@ -19,7 +19,7 @@ class ValidatorsMap:
             for validator in default_validators:
                 self.add(validator)
 
-    def add(self, validator: ABCValidator) -> typing.NoReturn:
+    def add(self, validator: ABCValidator):
         """ Add validator to map """
         if not validator.key:
             raise VBMLError("Validator key is undefined")
