@@ -4,7 +4,7 @@ from vbml.validator.abc import ABCValidator, FuncBasedValidatorCallable
 from vbml.validator.validator import FuncBasedValidator
 from vbml.utils.exception import VBMLError
 import typing
-import types
+import inspect
 
 if typing.TYPE_CHECKING:
     from vbml.pattern import Pattern
@@ -39,17 +39,19 @@ class ABCPatcher(ABC):
         """
 
         def decorator(validator_handler: ValidatorType) -> ABCValidator:
-            validator: ABCValidator
+            validator: typing.Optional[ABCValidator] = None
 
-            if isinstance(validator_handler, types.FunctionType):
+            if inspect.isclass(validator_handler):
+                if issubclass(validator_handler, ABCValidator):  # type: ignore
+                    if key is not None:
+                        validator_handler.key = key
+                    validator = validator_handler()  # type: ignore
+            elif callable(validator_handler):
                 validator = FuncBasedValidator(
                     key or validator_handler.__name__, validator_handler
                 )
-            elif issubclass(validator_handler, ABCValidator):  # type: ignore
-                if key is not None:
-                    validator_handler.key = key
-                validator = validator_handler()  # type: ignore
-            else:
+
+            if validator is None:
                 raise VBMLError("Validator's type is undefined")
 
             self.validators_map.add(validator)
