@@ -1,14 +1,12 @@
 from vbml.pattern.syntax import *
 from vbml.utils import PatternError, SyntaxArgument, RecursionArgument
-from typing import Union, NoReturn, Callable
-
-ArgumentPattern = Union[str, NoReturn]
+from typing import Union, Callable
 
 
 def syntax_for(syntax_char: str):
     """ Decorate argument shift handlers """
 
-    def decorator(func: Callable[["Syntax", SyntaxArgument], Union[ArgumentPattern, dict]]):
+    def decorator(func: Callable[["Syntax", SyntaxArgument], Union[str, dict]]):
         return syntax_char, func
 
     return decorator
@@ -21,7 +19,7 @@ class Syntax:
     """
 
     @syntax_for(UNION)
-    def union(self, arg: SyntaxArgument) -> ArgumentPattern:
+    def union(self, arg: SyntaxArgument) -> str:
         """ UNION - splits value afterwards with given inclusion """
         if not len(arg.name.strip(UNION)):
             raise PatternError("Union argument should be named")
@@ -30,7 +28,7 @@ class Syntax:
         return pattern
 
     @syntax_for(ONE_CHAR)
-    def one_char(self, arg: SyntaxArgument) -> ArgumentPattern:
+    def one_char(self, arg: SyntaxArgument) -> str:
         """ ONE_CHAR - every symbol of inclusion is single char processed """
         if not len(arg.name.strip(ONE_CHAR)):
             raise PatternError("Char argument should be named")
@@ -43,7 +41,7 @@ class Syntax:
         return "(?P<" + arg.name.strip(ONE_CHAR) + ">" + pattern + ")"
 
     @syntax_for(EXCEPT)
-    def except_(self, arg: SyntaxArgument) -> ArgumentPattern:
+    def except_(self, arg: SyntaxArgument) -> str:
         """ EXCEPT - approves value if it doesnt contain any symbol from inclusion """
         if not arg.inclusion:
             raise PatternError(
@@ -57,7 +55,7 @@ class Syntax:
         return "(?P<{}>{}+)".format(arg.name.strip(EXCEPT), pattern)
 
     @syntax_for(REGEX)
-    def regex(self, arg: SyntaxArgument) -> ArgumentPattern:
+    def regex(self, arg: SyntaxArgument) -> str:
         """ REGEX - inclusion is regex """
         if not arg.inclusion:
             raise PatternError(
@@ -66,19 +64,19 @@ class Syntax:
         return arg.inclusion
 
     @syntax_for(ANYTHING)
-    def anything(self, arg: SyntaxArgument) -> ArgumentPattern:
+    def anything(self, arg: SyntaxArgument) -> str:
         if arg.inclusion or arg.name.strip(ANYTHING):
             raise PatternError("Inclusion and name in anything-argument are forbidden")
         return "(?:.+)"
 
     @syntax_for(IGNORE)
-    def ignore(self, arg: SyntaxArgument) -> ArgumentPattern:
+    def ignore(self, arg: SyntaxArgument) -> str:
         if arg.inclusion or arg.name.strip(IGNORE):
             raise PatternError("Inclusion and name in ignore-argument are forbidden")
         return "(?:.*?)"
 
     @syntax_for(RECURSION)
-    def recursion(self, arg: SyntaxArgument) -> ArgumentPattern:
+    def recursion(self, arg: SyntaxArgument) -> str:
         """ RECURSION - schema inside the inclusion creates new pattern """
         return "(?P<" + arg.name.strip(RECURSION) + ">" + ".*" + ")"
 
@@ -99,7 +97,7 @@ class Syntax:
 
         return RecursionArgument(pattern, {"text": pattern})
 
-    def get_syntax(self, char: str) -> Callable[["Syntax", SyntaxArgument], ArgumentPattern]:
+    def get_syntax(self, char: str) -> Callable[["Syntax", SyntaxArgument], str]:
         """ Find shift argument handler by syntax char
         :param char: syntax char
         :return: shift argument handler
