@@ -41,11 +41,13 @@ class ABCPatcher(ABC):
         def decorator(validator_handler: ValidatorType) -> ABCValidator:
             validator: typing.Optional[ABCValidator] = None
 
-            if inspect.isclass(validator_handler):
-                if issubclass(validator_handler, ABCValidator):  # type: ignore
-                    if key is not None:
-                        validator_handler.key = key
-                    validator = validator_handler()  # type: ignore
+            if (
+                inspect.isclass(validator_handler)
+                and issubclass(validator_handler, ABCValidator)  # type: ignore
+            ):
+                if key is not None:
+                    validator_handler.key = key
+                validator = validator_handler()  # type: ignore
             elif callable(validator_handler):
                 validator = FuncBasedValidator(
                     key or validator_handler.__name__, validator_handler

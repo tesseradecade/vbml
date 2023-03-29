@@ -19,13 +19,13 @@ class ValidatorsMap:
             for validator in default_validators:
                 self.add(validator)
 
-    def add(self, validator: ABCValidator):
+    def add(self, validator: ABCValidator) -> None:
         """ Add validator to map """
         if not validator.key:
             raise VBMLError("Validator key is undefined")
         self.validators_map[validator.key] = validator
 
-    def get(self, key: str, no_error: bool = True):
+    def get(self, key: str, no_error: bool = True) -> ABCValidator:
         """ Get validator from map """
         validator = self.validators_map.get(key)
         if validator is None and not no_error:
