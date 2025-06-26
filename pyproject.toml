@@ -37,9 +37,6 @@ dependencies = [
     "fntypes",
 ]
 
-[project.optional-dependencies]
-regex = ["regex (>=2024.11.6,<2025.0.0)"]
-
 [project.urls]
 Source = "https://github.com/tesseradecade/vbml"
 "Bug Tracker" = "https://github.com/tesseradecade/vbml/issues"

@@ -1,11 +1,17 @@
 <p align="center">
   <a href="https://github.com/tesseradecade/vbml">
-    <img src="/logo.jpeg" width="200px" style="display: inline-block;">
+    <img src="docs/logo.jpeg" width="200px" style="display: inline-block;">
   </a>
 </p>
-<h1 align="center">
-  markup language that compiles to regex
+
+<h1>
+  vbml
 </h1>
+
+<p>
+— markup language that compiles to regex.
+</p>
+
 <p align="center">
   <img alt="PyPI - License" src="https://img.shields.io/pypi/l/vbml?style=flat-square">
   <img alt="PyPI - Downloads" src="https://img.shields.io/pypi/dw/vbml?style=flat-square">

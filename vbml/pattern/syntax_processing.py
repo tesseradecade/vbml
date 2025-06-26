@@ -100,10 +100,8 @@ class Syntax:
         return RecursionArgument(pattern, {"text": pattern})
 
     def get_syntax(self, char: str) -> Callable[["Syntax", SyntaxArgument], ArgumentPattern]:
-        """ Find shift argument handler by syntax char
+        """Find shift argument handler by syntax char
         :param char: syntax char
         :return: shift argument handler
         """
-        return {v[0]: v[1] for k, v in self.__class__.__dict__.items() if isinstance(v, tuple)}[
-            char
-        ]
+        return {v[0]: v[1] for v in self.__class__.__dict__.values() if isinstance(v, tuple) and len(v) == 2}[char]
