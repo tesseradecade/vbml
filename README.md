@@ -4,7 +4,7 @@
   </a>
 </p>
 <h1 align="center">
-  VBML - perfect pythonistic parser / string manipulator :sparkles:
+  markup language that compiles to regex
 </h1>
 <p align="center">
   <img alt="PyPI - License" src="https://img.shields.io/pypi/l/vbml?style=flat-square">
@@ -71,6 +71,3 @@ result1 # {"amount": 3, "adj": "green"}
 result2 # None
 result3 # None
 ```
-
-Leave a star if this project helped you  
-Made by [timoniq](https://github.com/timoniq)

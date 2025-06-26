@@ -1,72 +1,139 @@
-[tool.poetry]
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
 name = "vbml"
-version = "1.0"
-description = "Way to check, match & resist. Sofisticated object oriented regex-based text parser"
-authors = ["timoniq"]
-license = "MIT"
+description = "Markup language that compiles to regex."
+authors = [{ name = "timoniq", email = "tesseradecades@mail.ru" }]
+requires-python = ">=3.13,<4.0"
 readme = "README.md"
-homepage = "https://github.com/tesseradecade/vbml"
-repository = "https://github.com/tesseradecade/vbml"
-keywords = ["parser", "string", "string-manipulation", "string-matching"]
+license = { file = "LICENSE" }
+maintainers = [{ name = "luwqz1", email = "howluwqz1@gmail.com" }]
+version = "2.0.dev0"
+keywords = [
+    "very beautiful",
+    "markup lang",
+    "markup language",
+    "regexp",
+    "regex",
+    "re",
+    "string validation",
+    "re compiler",
+    "string-matching",
+    "string-parser",
+]
 classifiers = [
-  "Environment :: Console",
-  "Intended Audience :: Developers",
-  "License :: OSI Approved :: MIT License",
-  "Programming Language :: Python :: 3.7",
-  "Programming Language :: Python :: 3.8",
-  "Topic :: Software Development :: Libraries :: Python Modules",
-  "Topic :: Software Development :: Quality Assurance",
-  "Typing :: Typed",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Quality Assurance",
+    "Typing :: Typed",
+]
+dependencies = [
+    "choicelib (>=0.1.5,<0.2.0)",
+    "fntypes",
 ]
 
-[tool.poetry.urls]
+[project.optional-dependencies]
+regex = ["regex (>=2024.11.6,<2025.0.0)"]
+
+[project.urls]
+Source = "https://github.com/tesseradecade/vbml"
 "Bug Tracker" = "https://github.com/tesseradecade/vbml/issues"
+Documentation = "https://github.com/tesseradecade/vbml/blob/master/docs/index.md"
 
-[tool.poetry.dependencies]
-python = "^3.7"
-typing_extensions = "^3.7.4"
+[dependency-groups]
+dev = [
+    "pre-commit>=4.2.0,<5",
+    "ruff>=0.12.0,<1",
+    "basedpyright>=1.29.4,<2",
+    "sort-all>=1.3.0,<2",
+    "pytest>=8.4.1,<9",
+    "pytest-asyncio>=1.0.0,<2",
+    "pytest-cov>=6.2.1,<7",
+    "pytest-mock>=3.14.1,<4",
+]
 
-[tool.poetry.dev-dependencies]
-# Lint
-lxml = "^4.5.0"
-mypy = "^0.770"
-isort = "^4.3"
-flake8 = "^3.7.9"
-mypy_extensions = "^0.4.3"
-black = {version = "^19.0", allow-prereleases = true}
+[tool.uv]
+package = true
 
-# Docs
-mkdocs = "^1.1"
-mkdocs-material = "^4.6"
-mkautodoc = "^0.1.0"
-pymdown-extensions = "^6.1"
+[tool.uv.sources]
+fntypes = { git = "https://github.com/timoniq/fntypes.git" }
 
-# Tests
-pytest = "^5.4"
-pytest-cov = "^2.8"
+[tool.ruff]
+line-length = 150
+target-version = "py313"
 
-[tool.black]
-line-length = 99
-target-version = ['py37', 'py38']
-exclude = '''
-(
-    \.eggs
-  | \.git
-  | \.tox
-  | build
-  | dist
-  | venv
-  | docs
-)
-'''
+[tool.ruff.format]
+quote-style = "double"
+docstring-code-line-length = "dynamic"
 
-[tool.isort]
-multi_line_output = 3
-include_trailing_comma = true
-force_grid_wrap = 0
-use_parentheses = true
-line_length = 99
+[tool.ruff.lint]
+select = [
+  "I",
+  "D",
+  "N",
+  "PLR",
+  "Q",
+  "COM",
+  "TC",
+  "YTT",
+  "SIM"
+]
+ignore = [
+  "COM812",
+  "N805",
+  "N818",
+  "TC001",
+  "TC002",
+  "TC003",
+  "TC004",
+  "D100",
+  "D101",
+  "D102",
+  "D103",
+  "D104",
+  "D105",
+  "D107",
+  "D202",
+  "D203",
+  "D205",
+  "D209",
+  "D211",
+  "D213",
+  "D400",
+  "D401",
+  "D404",
+  "D415",
+  "PLR2004",
+  "PLR0911",
+  "PLR0912",
+  "PLR0913"
+]
+fixable = ["ALL"]
+exclude = [".venv", ".idea", "docs"]
 
-[build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401", "F403"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.pyright]
+exclude = [
+  ".venv",
+  ".idea",
+  ".ruff_cache",
+  ".pytest_cache",
+  "docs",
+]
+typeCheckingMode = "strict"
+pythonPlatform = "All"
+pythonVersion = "3.13"
+reportMissingImports = true
+reportMissingTypeStubs = false
+reportSelfClsParameterName = false
