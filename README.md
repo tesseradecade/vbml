@@ -8,7 +8,7 @@
 — markup language that compiles to regex.
 </p>
 
-<img alt="VBML version" src="https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ftesseradecade%2Fvbml%2Frefs%2Fheads%2Fmaster%2Fpyproject.toml&query=%24.project.version&style=flat-square&label=version&labelColor=black">
+<img alt="VBML version" src="https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ftesseradecade%2Fvbml%2Frefs%2Fheads%2Fmaster%2Fpyproject.toml&query=%24.project.version&style=flat-square&label=version&labelColor=black"></img>
 <img alt="Python version" src="https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ftesseradecade%2Fvbml%2Frefs%2Fheads%2Fmaster%2Fpyproject.toml&query=%24.project.requires-python&style=flat-square&logoColor=fff&label=python&labelColor=black"></img>
 <img alt="PyPI - Downloads" src="https://img.shields.io/pypi/dw/vbml?color=lightGreen&labelColor=black&style=flat-square"></img>
 <img alt="GitHub issues by-label" src="https://img.shields.io/github/issues/tesseradecade/vbml/bug?labelColor=black&style=flat-square"></img>
