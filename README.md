@@ -1,12 +1,8 @@
-<p align="center">
+<p>
   <a href="https://github.com/tesseradecade/vbml">
-    <img src="docs/logo.jpeg" width="200px" style="display: inline-block;">
+    <img src=".github/vbml-logo.png" width="200px" style="display: inline-block;">
   </a>
 </p>
-
-<h1>
-  vbml
-</h1>
 
 <p>
 — markup language that compiles to regex.
@@ -19,11 +15,12 @@
 
 ## Features
 
-* Clean `regex`-based parser
-* Easy-to-understand validators / Custom validators
-* Lots of features out-of-box
+* Clean regex compiler and parser (the regex core can be easily switched)
+* Built-in validators and easy to implement custom ones
 
-`I am <name>, i am <age:int> years old` + `I am Steven, i am 20 years old` = `{"name": "Steven", "age": 20}`
+```js
+"I am <name>, i am <age:int> years old" + "I am Steve, i am 50 years old" = {"name": "Steve", "age": 50}
+```
 
 ## Installation
 
@@ -35,27 +32,11 @@ poetry add vbml
 uv add vbml
 ```
 
-## Run tests
-
-Clone repo from git:
-
-```shell script
-git clone https://github.com/tesseradecade/vbml.git
-```
-
-Go to repository and run tests with `uv`:
-
-```shell script
-cd vbml
-uv sync
-uv run pytest tests
-```
-
 ## :book: Documentation
 
-Full documentation contents are available in [docs/index.md](/docs/index.md)
+[\*here\*](/docs/index.md)
 
-## Simple example
+## Example
 
 ```python
 from vbml import Patcher, Pattern
@@ -65,7 +46,7 @@ pattern = Pattern("I have <amount:int> apples. They are <adj>")
 
 result1 = patcher.check(pattern, "I have 3 apples. They are green")
 result2 = patcher.check(pattern, "I have three apples. They are green")
-result3 = patcher.check(pattern, "Something irrelevant")
+result3 = patcher.check(pattern, "I have apples")
 
 result1 # {"amount": 3, "adj": "green"}
 result2 # None
