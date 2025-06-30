@@ -1,52 +1,73 @@
-from vbml.patcher.abc import ABCPatcher
-from vbml.pattern import Pattern
-from vbml.utils.exception import ParseError
+from __future__ import annotations
+
 import typing
+
+from fntypes.library.misc import is_err, is_ok
+from fntypes.library.monad.option import Nothing
+
+from vbml.error import ParseError
+from vbml.patcher.abc import ABCPatcher
+from vbml.pattern.pattern import Pattern
+
+if typing.TYPE_CHECKING:
+    from vbml.pattern.abc import ABCPattern
 
 
 class Patcher(ABCPatcher):
-    """ Main patcher to parse and validate
-    Patcher documentation: https://github.com/tesseradecade/vbml/blob/master/docs/patcher.md
-    """
+    __slots__ = ()
 
-    def check(
-        self, pattern: Pattern, text: str, ignore_validation: bool = False
-    ) -> typing.Optional[typing.Union[typing.Dict[typing.Any, typing.Any], bool]]:
-        check = pattern.parse(text)
+    def validate(self, pattern: Pattern, data: dict[str, typing.Any]) -> dict[str, typing.Any] | None:
+        validated: dict[str, typing.Any] | None = {}
 
-        if ignore_validation:
-            return pattern.dict() if check else False
-
-        elif not check:
-            return False
-
-        keys = pattern.dict()
-
-        if self.disable_validators:
-            return keys
-
-        valid_keys: typing.Optional[dict] = {}
-
-        for key in keys:
-            if valid_keys is None:
+        for key, value in data.items():
+            if validated is None:
                 break
+
             if key in pattern.validation:
                 for validator in pattern.validation[key]:
                     validator_obj = self.validators_map.get(validator)
 
                     if validator_obj is None:
-                        raise ParseError(f"Unknown validator: {validator}")
+                        raise ParseError(f"Unknown validator `{validator}`.")
 
-                    args = pattern.validation[key][validator] or []
-                    valid = self.validators_map.get(validator).check(keys[key], *args)
+                    args = pattern.validation[key][validator]
+                    result = self.validators_map.get(validator, no_error=False).check(value, *args)
 
-                    if valid is None:
-                        valid_keys = None
+                    if result is None or is_err(result):
+                        if result is not None and not isinstance(result, Nothing):
+                            result.unwrap()
+
+                        validated = None
                         break
-                    valid_keys[key] = valid
 
-            elif valid_keys is not None:
-                valid_keys[key] = keys[key]
+                    validated[key] = result if not is_ok(result) else result.unwrap()
+            else:
+                validated[key] = value
 
-        pattern.pregmatch = valid_keys
-        return valid_keys
+        if validated is not None:
+            pattern.pregmatch = validated
+
+        return validated
+
+    def check(
+        self,
+        pattern: ABCPattern,
+        text: str,
+        ignore_validation: bool = False,
+    ) -> dict[str, typing.Any] | typing.Literal[False, None]:
+        parsed = pattern.parse(text)
+
+        if ignore_validation:
+            return pattern.dict() if parsed else False
+
+        if not parsed:
+            return False
+
+        data = pattern.dict()
+        if not self.disable_validators and isinstance(pattern, Pattern):
+            return self.validate(pattern, data)
+
+        return data
+
+
+__all__ = ("Patcher",)

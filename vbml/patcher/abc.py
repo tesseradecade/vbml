@@ -1,70 +1,61 @@
-from abc import ABC, abstractmethod
-from vbml.validator.map import ValidatorsMap
-from vbml.validator.abc import ABCValidator, FuncBasedValidatorCallable
-from vbml.validator.validator import FuncBasedValidator
-from vbml.utils.exception import VBMLError
+from __future__ import annotations
+
+import abc
 import typing
-import types
+from collections.abc import Callable
+
+from vbml.error import VBMLError
+from vbml.validator.abc import ABCValidator
+from vbml.validator.func import FuncBasedValidator, FuncBasedValidatorCallable
+from vbml.validator.map import ValidatorsMap
 
 if typing.TYPE_CHECKING:
-    from vbml.pattern import Pattern
+    from vbml.pattern.abc import ABCPattern
+
+type ValidatorType = ABCValidator | type[ABCValidator] | FuncBasedValidatorCallable
 
 
-ValidatorType = typing.Union[
-    FuncBasedValidatorCallable, typing.Type[ABCValidator],
-]
-
-
-class ABCPatcher(ABC):
-    """ Vbml Patcher (pattern validation)
-     Read the docs here: https://github.com/tesseradecade/vbml/blob/master/docs/patcher.md
-     """
+class ABCPatcher(abc.ABC):
+    __slots__ = ("disable_validators", "validators_map")
 
     def __init__(
-        self, disable_validators: bool = False, validators_map: ValidatorsMap = ValidatorsMap(),
-    ):
-        """ Init patcher
-        :param disable_validators: if True validation will be disabled
-        :param validators_map: read docs at validators-map.md
-        """
+        self,
+        disable_validators: bool = False,
+        validators_map: ValidatorsMap | None = None,
+    ) -> None:
         self.disable_validators = disable_validators
-        self.validators_map = validators_map
+        self.validators_map = validators_map or ValidatorsMap()
 
-    def validator(
-        self, key: typing.Optional[str] = None
-    ) -> typing.Callable[[ValidatorType], ABCValidator]:
-        """ Used as decorator for validator. Decorated func will be wrapped with FuncBaseValidator.
-        :param key: validator name
-        :return: decorator
-        """
+    def validator[Validator: ValidatorType](self, key: str | None = None) -> Callable[[Validator], Validator]:
+        def wrapper(validator: typing.Any) -> typing.Any:
+            validator_handler: ValidatorType = typing.cast("ValidatorType", validator)
+            if isinstance(validator_handler, type):
+                validator = validator_handler()
 
-        def decorator(validator_handler: ValidatorType) -> ABCValidator:
-            validator: ABCValidator
+            elif isinstance(validator_handler, Callable):
+                if not key:
+                    raise VBMLError("No key is defined for validator callable.")
 
-            if isinstance(validator_handler, types.FunctionType):
-                validator = FuncBasedValidator(
-                    key or validator_handler.__name__, validator_handler
-                )
-            elif issubclass(validator_handler, ABCValidator):  # type: ignore
-                if key is not None:
-                    validator_handler.key = key
-                validator = validator_handler()  # type: ignore
-            else:
-                raise VBMLError("Validator's type is undefined")
+                validator = FuncBasedValidator(key, validator_handler)
+
+            if not isinstance(validator, ABCValidator):
+                raise VBMLError("Validator must inherit from `ABCValidator`.")
+
+            if not key and not validator.key:
+                raise VBMLError("No key is defined for validator instance.")
 
             self.validators_map.add(validator)
-            return validator
 
-        return decorator
+        return wrapper
 
-    @abstractmethod
+    @abc.abstractmethod
     def check(
-        self, pattern: "Pattern", text: str, ignore_validation: bool = False
-    ) -> typing.Optional[typing.Union[typing.Dict[typing.Any, typing.Any], bool]]:
-        """ Parse and validate pattern
-        :param pattern: validated pattern
-        :param text: validated text
-        :param ignore_validation: just parse pattern
-        :return: None if validation failed, False if parsing failed, dict if validation succeed
-        """
+        self,
+        pattern: ABCPattern,
+        text: str,
+        ignore_validation: bool = False,
+    ) -> bool | dict[str, typing.Any] | None:
         pass
+
+
+__all__ = ("ABCPatcher",)

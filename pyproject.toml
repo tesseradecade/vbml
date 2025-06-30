@@ -131,3 +131,5 @@ pythonVersion = "3.13"
 reportMissingImports = true
 reportMissingTypeStubs = false
 reportSelfClsParameterName = false
+reportAny = false
+reportUnusedCallResult = false

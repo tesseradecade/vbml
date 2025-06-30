@@ -25,7 +25,7 @@ repos:
       - id: basedpyright
         name: basedpyright
         description: "Run 'basedpyright' for Python type checking"
-        entry: uv run basedpyright --level=ERROR
+        entry: uv run basedpyright vbml --level error
         pass_filenames: false
         language: system
         types: [ python ]
@@ -34,7 +34,7 @@ repos:
       - id: pytest
         name: pytest
         description: "Run tests for testing code"
-        entry: uv run pytest
+        entry: uv run pytest tests
         language: system
         pass_filenames: false
         types: [ python ]

@@ -1,6 +1,6 @@
-from vbml import Patcher
-from vbml import Pattern
 import sys
+
+from vbml import Patcher, Pattern
 
 patcher = Patcher()
 pattern = Pattern("solve <a:int> <(+-/*)^operand> <b:int>")

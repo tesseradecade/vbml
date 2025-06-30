@@ -1,5 +1,4 @@
-from vbml import Patcher
-from vbml import Pattern
+from vbml import Patcher, Pattern
 
 patcher = Patcher()
 

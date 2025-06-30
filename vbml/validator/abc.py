@@ -1,23 +1,18 @@
-from abc import ABC, abstractmethod
+import abc
 import typing
-from typing_extensions import Protocol, runtime_checkable
+
+from fntypes.library.monad.result import Wrapped
+
+type ValidatorResult = Wrapped[typing.Any] | typing.Any | None
 
 
-@runtime_checkable
-class FuncBasedValidatorCallable(Protocol):
-    """ Used to derive func to FuncBasedValidator with typings """
+class ABCValidator(abc.ABC):
+    __slots__ = ()
 
-    key: typing.Optional[str] = None
+    key: str | None = None
 
-    def __call__(self, value: str, *args: typing.Any) -> typing.Optional[typing.Any]:
-        ...
-
-
-class ABCValidator(ABC):
-    """ Parent of all validators. Key field is required """
-
-    key: typing.Optional[str] = None
-
-    @abstractmethod
-    def check(self, value: str, *args) -> typing.Optional[typing.Any]:
+    def check(self, value: typing.Any, *args: str) -> ValidatorResult:
         pass
+
+
+__all__ = ("ABCValidator", "ValidatorResult")

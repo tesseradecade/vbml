@@ -1,33 +1,17 @@
-from abc import ABC, abstractmethod
+import abc
 import typing
 
 
-class ABCPattern(ABC):
-    """ Vbml Pattern to parse and setup
-    Read the docs here: https://github.com/tesseradecade/vbml/blob/master/docs/pattern.md
-    """
+class ABCPattern(abc.ABC):
+    __slots__ = ()
 
-    @abstractmethod
-    def __init__(
-        self, text: typing.Optional[str] = None, regex: str = "{}$", lazy: bool = True, **context
-    ):
-        """ Init Pattern
-        :param text: Pattern Schema syntax
-        :param regex: regex, {} is replaced with vbml pattern-generated regex
-        :param lazy: https://github.com/tesseradecade/vbml/blob/master/docs/pattern.md
-        :param context: dev values
-        """
+    @abc.abstractmethod
+    def parse(self, text: str) -> bool:
         pass
 
-    @abstractmethod
-    def parse(self, text: str) -> typing.Optional[bool]:
-        """ Parse text with current pattern
-        :param text: parsed text
-        :return: did it succeed? (True/False)
-        """
+    @abc.abstractmethod
+    def dict(self) -> dict[str, typing.Any]:
         pass
 
-    @abstractmethod
-    def dict(self) -> dict:
-        """ Returns pregmatch or raises an exception """
-        pass
+
+__all__ = ("ABCPattern",)

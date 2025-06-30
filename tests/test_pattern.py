@@ -1,5 +1,6 @@
 from vbml import Pattern
 
+
 def test_start_pattern():
     pattern = Pattern("i am <name>")
     result = pattern.parse("i am vbml")
@@ -32,6 +33,7 @@ def test_pattern_lazy():
 
     assert pattern.dict() == {"name": "Kate", "surname": "Isobelle Furler"}
     assert pattern2.dict() == {"name": "Kate Isobelle", "surname": "Furler"}
+
 
 def test_pattern_escape():
     pattern = Pattern("$%^/\\[]<(/\\)^char>")

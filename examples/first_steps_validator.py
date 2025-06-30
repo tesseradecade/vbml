@@ -1,19 +1,20 @@
-from vbml import Patcher
-from vbml import Pattern
 from re import compile
 
+from vbml import Patcher, Pattern
 
-patcher = Patcher()
 URL_REGEX = compile(r"http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+")
 
+patcher = Patcher()
+
+
 @patcher.validator("url")
-def url_validator(value: str, *args):
-    if URL_REGEX.match(value):
-        return value
+def url_validator(value: str) -> str | None:
+    return value if URL_REGEX.match(value) else None
 
 
-pattern = Pattern("New video <video_url:url> on my youtube channel")
-result = patcher.check(pattern, "New video https://youtu.be/RJVFkzLqXP8 on my youtube channel")
+pattern = Pattern("Nice repository base layer <gh_repo_url:url>")
+result = patcher.check(pattern, "Nice repository base layer https://github.com/flaunysagh/repositorybaselayer")
 
-print("Match succeed", result)
+
+print("Match succeed", result not in (False, None))
 print("Match data", pattern.dict())
