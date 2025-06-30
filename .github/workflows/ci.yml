@@ -1,16 +1,10 @@
 name: CI
 
 'on':
-  workflow_call:
-    inputs:
-      os:
-        description: "Operating system"
-        required: true
-        type: string
-      python-version:
-        description: "Python version"
-        required: true
-        type: string
+  push:
+    branches:
+      - dev
+      - master
 
 defaults:
   run:
@@ -19,32 +13,32 @@ defaults:
 jobs:
   lock-file:
     name: "Lock uv"
-    runs-on: ${{ inputs.os }}
+    runs-on: ubuntu-latest
     steps:
       - uses: asottile/workflows/.github/actions/fast-checkout@v1.8.1
 
       - uses: ./.github/actions/install-dependencies
         with:
-          python-version: ${{ inputs.python-version }}
+          python-version: "3.13"
 
       - run: uv lock --locked
 
   linting:
     name: "Linting"
-    runs-on: ${{ inputs.os }}
+    runs-on: ubuntu-latest
     needs: lock-file
     steps:
       - uses: asottile/workflows/.github/actions/fast-checkout@v1.8.1
 
       - uses: ./.github/actions/install-dependencies
         with:
-          python-version: ${{ inputs.python-version }}
+          python-version: "3.13"
 
       - name: Load ruff cache
         id: cached-ruff
         uses: actions/cache@v4
         with:
-          key: ruff-${{ inputs.python-version }}-${{ runner.os }}-${{ hashFiles('pyproject.toml') }}
+          key: ruff-3.13-${{ runner.os }}-${{ hashFiles('pyproject.toml') }}
           path: .ruff_cache
 
       - name: "Run ruff"
@@ -52,33 +46,33 @@ jobs:
 
   type-checking:
     name: "Type-checking"
-    runs-on: ${{ inputs.os }}
+    runs-on: ubuntu-latest
     needs: lock-file
     steps:
       - uses: asottile/workflows/.github/actions/fast-checkout@v1.8.1
 
       - uses: ./.github/actions/install-dependencies
         with:
-          python-version: ${{ inputs.python-version }}
+          python-version: "3.13"
 
       - run: uv run basedpyright vbml --level error
 
   tests:
     name: "Testing"
-    runs-on: ${{ inputs.os }}
+    runs-on: ubuntu-latest
     needs: lock-file
     steps:
       - uses: asottile/workflows/.github/actions/fast-checkout@v1.8.1
 
       - uses: ./.github/actions/install-dependencies
         with:
-          python-version: ${{ inputs.python-version }}
+          python-version: "3.13"
 
       - name: Load pytest cache
         id: cached-pytest
         uses: actions/cache@v4
         with:
-          key: pytest-${{ inputs.python-version }}-${{ runner.os }}
+          key: pytest-3.13-${{ runner.os }}
           path: .pytest_cache
 
       - name: "Run pytest"

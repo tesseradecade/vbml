@@ -6,7 +6,6 @@ from fntypes.library.monad.option import Nothing, Option, Some
 from vbml.parser.argument_parser import Argument
 from vbml.parser.syntax import Syntax
 
-ARGUMENT: typing.Final[str] = r"<\1>"
 INCLUSION: typing.Final[re.Pattern[str]] = re.compile(r"^\((.*?)\)[a-zA-Z0-9_" + "".join(Syntax) + r"]+[:]?.*?$", re.MULTILINE)
 INCLUSION_NESTED: typing.Final[re.Pattern[str]] = re.compile(r"^\((.*)\)[a-zA-Z0-9_" + "".join(Syntax) + r"]+[:]?.*$", re.MULTILINE)
 

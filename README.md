@@ -48,7 +48,7 @@ result1 = patcher.check(pattern, "I have 3 apples. They are green")
 result2 = patcher.check(pattern, "I have three apples. They are green")
 result3 = patcher.check(pattern, "I have apples")
 
-result1 # {"amount": 3, "adj": "green"}
-result2 # None
-result3 # None
+result1  # {"amount": 3, "adj": "green"}
+result2  # None
+result3  # False
 ```
