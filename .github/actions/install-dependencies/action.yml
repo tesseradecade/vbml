@@ -1,0 +1,15 @@
+name: Install uv and dependencies
+
+runs:
+  using: composite
+  steps:
+    - uses: hynek/setup-cached-uv@v2
+      with:
+        cache-suffix: -3.13-cache
+        cache-dependency-path: "**/uv.lock"
+
+    - name: "Install dependencies"
+      run: |
+        uv venv --python 3.13
+        uv sync --all-groups --dev
+      shell: bash
