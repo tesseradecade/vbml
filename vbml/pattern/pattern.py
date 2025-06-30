@@ -90,14 +90,19 @@ class Pattern(ABCPattern):
         self._representation = None
 
     def __repr__(self) -> str:
-        return "<{}: text={!r}, regex={!r}, flags={!r}, lazy={!r}, pregmatch={!r}>".format(
+        return "<{}: text={!r}, compiled_pattern={!r}, regex={!r}, flags={!r}, lazy={!r}, pregmatch={!r}>".format(
             ".".join((type(self).__module__, type(self).__name__)),
             self.text,
+            self.regex.format(self.pattern.pattern),
             self.regex,
             self.flags,
             self.lazy,
             self.pregmatch,
         )
+
+    @property
+    def compiled_pattern(self) -> str:
+        return self.pattern.pattern
 
     @property
     def representation(self) -> str:

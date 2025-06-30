@@ -17,6 +17,9 @@ class ValidatorsMap:
             for validator in default_validators:
                 self.add(validator)
 
+    def __repr__(self) -> str:
+        return "{}({!r})".format(type(self).__name__, self.validators_map)
+
     def add(self, validator: ABCValidator) -> None:
         if not validator.key:
             raise VBMLError("Validator key is empty or undefined.")

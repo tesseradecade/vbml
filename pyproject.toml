@@ -10,7 +10,7 @@ requires-python = ">=3.13,<4.0"
 readme = "README.md"
 license = { file = "LICENSE" }
 maintainers = [{ name = "luwqz1", email = "howluwqz1@gmail.com" }]
-version = "2.0.dev0"
+version = "2.0.0"
 keywords = [
     "very beautiful",
     "markup lang",

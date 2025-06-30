@@ -26,6 +26,13 @@ class ABCPatcher(abc.ABC):
         self.disable_validators = disable_validators
         self.validators_map = validators_map or ValidatorsMap()
 
+    def __repr__(self) -> str:
+        return "<{}: disable_validators={!r}, validators_map={!r}>".format(
+            ".".join((type(self).__module__, type(self).__name__)),
+            self.disable_validators,
+            self.validators_map,
+        )
+
     def validator[Validator: ValidatorType](self, key: str | None = None) -> Callable[[Validator], Validator]:
         def wrapper(validator: typing.Any) -> typing.Any:
             validator_handler: ValidatorType = typing.cast("ValidatorType", validator)
