@@ -16,11 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: asottile/workflows/.github/actions/fast-checkout@v1.8.1
-
       - uses: ./.github/actions/install-dependencies
-        with:
-          python-version: "3.13"
-
       - run: uv lock --locked
 
   linting:
@@ -29,10 +25,7 @@ jobs:
     needs: lock-file
     steps:
       - uses: asottile/workflows/.github/actions/fast-checkout@v1.8.1
-
       - uses: ./.github/actions/install-dependencies
-        with:
-          python-version: "3.13"
 
       - name: Load ruff cache
         id: cached-ruff
@@ -50,11 +43,7 @@ jobs:
     needs: lock-file
     steps:
       - uses: asottile/workflows/.github/actions/fast-checkout@v1.8.1
-
       - uses: ./.github/actions/install-dependencies
-        with:
-          python-version: "3.13"
-
       - run: uv run basedpyright vbml --level error
 
   tests:
@@ -63,10 +52,7 @@ jobs:
     needs: lock-file
     steps:
       - uses: asottile/workflows/.github/actions/fast-checkout@v1.8.1
-
       - uses: ./.github/actions/install-dependencies
-        with:
-          python-version: "3.13"
 
       - name: Load pytest cache
         id: cached-pytest

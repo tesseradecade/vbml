@@ -3,7 +3,7 @@ from collections.abc import Callable
 
 from vbml.validator.abc import ABCValidator, ValidatorResult
 
-type FuncBasedValidatorCallable = Callable[typing.Concatenate[str, ...], ValidatorResult]
+type FuncBasedValidatorCallable = Callable[typing.Concatenate[typing.Any, ...], ValidatorResult]
 
 
 class FuncBasedValidator(ABCValidator):
