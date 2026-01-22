@@ -4,7 +4,7 @@ import dataclasses
 import typing
 from collections import deque
 
-from kungfu.library.monad.option import Nothing, Option, Some
+from kungfu.library.monad.option import NOTHING, Option, Some
 from kungfu.library.monad.result import Error, Ok, Result
 from kungfu.library.unwrapping import unwrapping
 
@@ -53,7 +53,7 @@ def parse(
             return Error("Argument name cannot be empty.")
 
         syntax = SYNTAX_MAP.get(argument_name[0])
-        inclusion = inclusions.get(argument_name, Nothing())
+        inclusion = inclusions.get(argument_name, NOTHING)
         syntax_argument = Argument(Some(argument_name), inclusion)
 
         match syntax:

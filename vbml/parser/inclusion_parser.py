@@ -1,7 +1,7 @@
 import re
 import typing
 
-from kungfu.library.monad.option import Nothing, Option, Some
+from kungfu.library.monad.option import NOTHING, Option, Some
 
 from vbml.parser.argument_parser import Argument
 from vbml.parser.syntax import Syntax
@@ -12,7 +12,7 @@ INCLUSION_NESTED: typing.Final[re.Pattern[str]] = re.compile(r"^\((.*)\)[a-zA-Z0
 
 def parse_inclusion(argument: Argument, /) -> Option[str]:
     inclusion_list: list[str] = (INCLUSION_NESTED if argument.nested else INCLUSION).findall(argument.node.strip("<>"))
-    return Nothing() if not inclusion_list else Some(inclusion_list[0].replace("\\n", "\n"))
+    return NOTHING if not inclusion_list else Some(inclusion_list[0].replace("\\n", "\n"))
 
 
 __all__ = ("parse_inclusion",)

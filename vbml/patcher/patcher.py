@@ -3,7 +3,7 @@ from __future__ import annotations
 import typing
 
 from kungfu.library.misc import is_err, is_ok
-from kungfu.library.monad.option import Nothing
+from kungfu.library.monad.option import NOTHING, Nothing
 
 from vbml.error import ParseError
 from vbml.patcher.abc import ABCPatcher
@@ -34,7 +34,7 @@ class Patcher(ABCPatcher):
                     result = self.validators_map.get(validator, no_error=False).check(value, *args)
 
                     if result is None or is_err(result):
-                        if result is not None and not isinstance(result, Nothing):
+                        if result is not None and result is not NOTHING:
                             result.unwrap()
 
                         validated = None
