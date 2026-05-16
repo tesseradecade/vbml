@@ -49,6 +49,14 @@ repos:
         stages: [ pre-commit ]
 
       - id: ruff
+        name: ruff-sortall
+        description: "Run 'ruff check --select RUF022 --fix' for extremely fast Python sorting dunder alls"
+        entry: uv run ruff check --select RUF022 --fix
+        language: system
+        types: [ python ]
+        stages: [ pre-commit ]
+
+      - id: ruff
         name: ruff-format
         description: "Run 'ruff format' for extremely fast Python formatting"
         entry: uv run ruff format

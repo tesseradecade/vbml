@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import dataclasses
 import enum
+import types
 import typing
 from collections.abc import Callable
 from functools import cached_property, wraps
@@ -12,7 +13,7 @@ from kungfu.library.monad.result import Error, Ok, Result
 type SyntaxResult = Result[SyntaxPattern, str]
 type SyntaxHandler = Callable[[Argument], SyntaxResult]
 
-ESCAPE_TABLE: typing.Final = {ord(x): "\\" + x for x in r"/\.*+?()[]|^${}&"}
+ESCAPE_TABLE: typing.Final = types.MappingProxyType({ord(c): "\\" + c for c in r".^$*+?{}[]\|()"})
 
 
 def escape(string: str, /) -> str:
@@ -43,7 +44,7 @@ def syntax[F: SyntaxHandler](
 
             return func(argument)
 
-        synt.__dict__.update(dict(handler=wrapper))
+        synt.__dict__.update(dict(handler=wrapper))  # type: ignore
         return typing.cast("F", wrapper)
 
     return decorator
@@ -149,4 +150,4 @@ def recursion_syntax(argument: Argument) -> SyntaxResult:
 SYNTAX_MAP: typing.Final = {syntax.value: syntax for syntax in Syntax}
 
 
-__all__ = ("Argument", "SYNTAX_MAP", "Syntax", "SyntaxPattern", "escape", "syntax")
+__all__ = ("SYNTAX_MAP", "Argument", "Syntax", "SyntaxPattern", "escape", "syntax")

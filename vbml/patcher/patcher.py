@@ -3,7 +3,7 @@ from __future__ import annotations
 import typing
 
 from kungfu.library.misc import is_err, is_ok
-from kungfu.library.monad.option import NOTHING, Nothing
+from kungfu.library.monad.option import NOTHING
 
 from vbml.error import ParseError
 from vbml.patcher.abc import ABCPatcher

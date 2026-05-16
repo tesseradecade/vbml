@@ -60,7 +60,7 @@ class Pattern(ABCPattern):
                 default_validators=default_validators,
                 nestings=nestings,
             )
-            .map_err(lambda error: VBMLError(error))
+            .map_err(lambda error: VBMLError(error))  # type: ignore
             .unwrap()
         )
         self.flags = flags or re.NOFLAG
