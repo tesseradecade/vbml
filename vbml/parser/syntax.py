@@ -7,7 +7,7 @@ import typing
 from collections.abc import Callable
 from functools import cached_property, wraps
 
-from kungfu.library.monad.option import Nothing, Option, Some
+from kungfu.library.monad.option import Nothing, Option
 from kungfu.library.monad.result import Error, Ok, Result
 
 type SyntaxResult = Result[SyntaxPattern, str]
@@ -82,6 +82,9 @@ class Syntax(str, enum.Enum):
         # if key "handler" is not found in self.__dict__, raises NotImplementedError
         raise NotImplementedError(f"Syntax handler is not implemented for {self!r}")
 
+    def check(self, text: str, /) -> bool:
+        return self.value == text[0]
+
 
 @dataclasses.dataclass(slots=True, frozen=True)
 class SyntaxPattern:
@@ -98,25 +101,20 @@ class Argument:
 
 @syntax(Syntax.UNION, require_name=True)
 def union_syntax(argument: Argument) -> SyntaxResult:
-    return Ok(SyntaxPattern("(?P<" + argument.name.unwrap().removeprefix(Syntax.UNION) + ">.*)", Syntax.UNION))
+    return Ok(SyntaxPattern(r"(?P<" + argument.name.unwrap().removeprefix(Syntax.UNION) + r">.*)", Syntax.UNION))
 
 
 @syntax(Syntax.SINGLE, require_name=True)
 def single_syntax(argument: Argument) -> SyntaxResult:
-    match argument.inclusion:
-        case Some(inclusion):
-            pattern = "[" + inclusion.translate(ESCAPE_TABLE) + "]"
-        case _:
-            pattern = "."
-
-    return Ok(SyntaxPattern("(?P<{}>{})".format(argument.name.unwrap().removeprefix(Syntax.SINGLE), pattern), Syntax.SINGLE))
+    pattern = argument.inclusion.map(lambda inclusion: r"[" + escape(inclusion) + r"]").unwrap_or(".")
+    return Ok(SyntaxPattern(r"(?P<{}>{})".format(argument.name.unwrap().removeprefix(Syntax.SINGLE), pattern), Syntax.SINGLE))
 
 
 @syntax(Syntax.EXCEPT, require_name=True, require_inclusion=True)
 def except_syntax(argument: Argument) -> SyntaxResult:
-    pattern = "(?P<{}>{}+)".format(
+    pattern = r"(?P<{}>{}+)".format(
         argument.name.unwrap().removeprefix(Syntax.EXCEPT),
-        "[^" + argument.inclusion.unwrap().translate(ESCAPE_TABLE) + "]",
+        r"[^" + escape(argument.inclusion.unwrap()) + r"]",
     )
     return Ok(SyntaxPattern(pattern, Syntax.EXCEPT))
 
@@ -128,19 +126,19 @@ def regex_syntax(argument: Argument) -> SyntaxResult:
 
 @syntax(Syntax.ANY)
 def any_syntax(_: Argument) -> SyntaxResult:
-    return Ok(SyntaxPattern("(?:.+)", Syntax.ANY))
+    return Ok(SyntaxPattern(r"(?:.+)", Syntax.ANY))
 
 
 @syntax(Syntax.IGNORE)
 def ignore_syntax(_: Argument) -> SyntaxResult:
-    return Ok(SyntaxPattern("(?:.*?)", Syntax.IGNORE))
+    return Ok(SyntaxPattern(r"(?:.*?)", Syntax.IGNORE))
 
 
 @syntax(Syntax.RECURSION, require_name=True, require_inclusion=True)
 def recursion_syntax(argument: Argument) -> SyntaxResult:
     return Ok(
         SyntaxPattern(
-            "(?P<{}>.*)".format(argument.name.unwrap().removeprefix(Syntax.RECURSION)),
+            r"(?P<{}>.*)".format(argument.name.unwrap().removeprefix(Syntax.RECURSION)),
             Syntax.RECURSION,
             data=dict(text=argument.inclusion.unwrap().strip('"')),
         ),

@@ -10,7 +10,7 @@ requires-python = ">=3.13,<4.0"
 readme = "README.md"
 license = { file = "LICENSE" }
 maintainers = [{ name = "luwqz1", email = "howluwqz1@gmail.com" }]
-version = "2.0.1"
+version = "2.0.2"
 keywords = [
     "very beautiful",
     "markup lang",
@@ -41,13 +41,13 @@ Documentation = "https://github.com/tesseradecade/vbml/blob/master/docs/index.md
 
 [dependency-groups]
 dev = [
-    "pre-commit>=4.6.0,<5",
-    "ruff>=0.15.13,<1",
-    "basedpyright>=1.39.4,<2",
-    "pytest>=9.0.3,<10",
-    "pytest-asyncio>=1.3.0,<2",
+    "pre-commit>=4.6.2,<5",
+    "ruff>=0.16.9,<1",
+    "basedpyright>=1.40.1,<2",
+    "pytest>=9.1.1,<10",
+    "pytest-asyncio>=1.4.0,<2",
     "pytest-cov>=7.1.0,<8",
-    "pytest-mock>=3.15.1,<4",
+    "pytest-mock>=3.16.0,<4",
 ]
 
 [tool.uv]
@@ -107,7 +107,8 @@ ignore = [
   "PLR2004",
   "PLR0911",
   "PLR0912",
-  "PLR0913"
+  "PLR0913",
+  "PLR0917",
 ]
 fixable = ["ALL"]
 exclude = [".venv", ".idea", "docs"]

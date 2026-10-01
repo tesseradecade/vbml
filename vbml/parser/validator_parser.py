@@ -25,7 +25,7 @@ def parse_validation(validator: ValidatorName, argument_node: str, /) -> list[st
 
 
 def get_validators(
-    arguments: list[Argument],
+    arguments: typing.Iterable[Argument],
     nestings: dict[str, Nesting] | None = None,
 ) -> Result[list[Validator], str]:
     nestings = nestings or {}

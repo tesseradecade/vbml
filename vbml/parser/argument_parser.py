@@ -12,7 +12,12 @@ ARG_NAME: typing.Final[re.Pattern[str]] = re.compile(r"<\(.*\)([A-Za-z0-9_" + ""
 VALIDATED_ARGS: typing.Final[re.Pattern[str]] = re.compile(r"<\s*([A-Za-z_][A-Za-z0-9_]*)\s*:\s*[^>]+?>", re.MULTILINE)
 
 
-def parse_arguments(text: str, /) -> deque[Argument]:
+def parse_arguments(
+    text: str,
+    /,
+    *,
+    default_validators: list[str] | None = None,
+) -> deque[Argument]:
     result = deque[Argument]()
     stack = deque[str]()
     start = None
@@ -25,41 +30,56 @@ def parse_arguments(text: str, /) -> deque[Argument]:
             case ">" if stack:
                 stack.pop()
                 if not stack and start is not None:
-                    name = text[start + 1 : i]
-                    result.append(Argument(text[start : i + 1], name, nested="<" in name and ">" in name))
+                    node = text[start : i + 1]
+                    name = parse_argument_name(node) or text[start + 1 : i]
+                    nested = Syntax.REGEX.check(name) or "<" in name and ">" in name
+                    argument = Argument(node, name, nested)
+                    result.append(
+                        parse_validated_argument(argument)
+                        if not default_validators
+                        else parse_default_validated_argument(argument, default_validators),
+                    )
             case _:
                 pass
 
     return result
 
 
+def parse_argument_name(argument_node: str, /) -> str | None:
+    if (arg_name := ARG_NAME.match(argument_node)) is not None:
+        return arg_name.group(1)
+
+    return None
+
+
 def parse_argument_names(arguments: Iterable[Argument], /) -> list[str]:
-    result = list[str]()
+    return [parse_argument_name(argument.node) or argument.name for argument in arguments]
 
-    for argument in arguments:
-        if (arg_name := ARG_NAME.match(argument.node)) is not None:
-            argument.name = arg_name.group(1)
 
-        result.append(argument.name)
+def parse_validated_argument(argument: Argument, /) -> Argument:
+    if not argument.nested and (m := VALIDATED_ARGS.search(argument.node)) is not None:
+        argument.name = m.group(1)
 
-    return result
+    return argument
+
+
+def parse_default_validated_argument(argument: Argument, default_validators: list[str], /) -> Argument:
+    if not argument.nested:
+        argument.node = f"{argument.node[:-1]}:{':'.join(default_validators)}>"
+
+    return argument
 
 
 def parse_validated_arguments(arguments: Iterable[Argument], /) -> list[Argument]:
     for argument in arguments:
-        if not argument.nested and (m := VALIDATED_ARGS.search(argument.node)) is not None:
-            argument.name = m.group(1)
+        parse_validated_argument(argument)
 
     return list(arguments)
 
 
-def parse_default_validated_arguments(
-    arguments: Iterable[Argument],
-    default_validators: list[str],
-) -> list[Argument]:
+def parse_default_validated_arguments(arguments: Iterable[Argument], default_validators: list[str], /) -> list[Argument]:
     for argument in arguments:
-        if not argument.nested:
-            argument.node = f"{argument.node[:-1]}:{':'.join(default_validators)}>"
+        parse_default_validated_argument(argument, default_validators)
 
     return list(arguments)
 
@@ -73,6 +93,7 @@ class Argument:
 
 __all__ = (
     "Argument",
+    "parse_argument_name",
     "parse_argument_names",
     "parse_arguments",
     "parse_default_validated_arguments",

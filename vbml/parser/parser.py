@@ -10,10 +10,7 @@ from kungfu.library.unwrapping import unwrapping
 
 import vbml.parser.argument_parser
 from vbml.parser.argument_parser import (
-    parse_argument_names,
     parse_arguments,
-    parse_default_validated_arguments,
-    parse_validated_arguments,
 )
 from vbml.parser.inclusion_parser import parse_inclusion
 from vbml.parser.syntax import SYNTAX_MAP, Argument, Syntax, SyntaxPattern, escape
@@ -38,15 +35,12 @@ def parse(
     default_validators: list[str] | None = None,
     nestings: dict[str, Nesting] | None = None,
 ) -> Result[Pattern, str]:
-    arguments = parse_arguments(pattern)
-    validated_arguments = (
-        parse_default_validated_arguments(arguments, default_validators) if default_validators is not None else parse_validated_arguments(arguments)
-    )
-    argument_names = parse_argument_names(arguments)
-    validators = get_validators(validated_arguments, nestings).unwrap()
-    recursion_patterns: dict[str, SyntaxPattern] = {}
-    inclusions = dict(zip(argument_names, [parse_inclusion(argument) for argument in arguments]))
+    arguments = parse_arguments(pattern, default_validators=default_validators)
+    argument_names = [argument.name for argument in arguments]
+    validators = get_validators(arguments, nestings).unwrap()
+    inclusions = dict(zip(argument_names, (parse_inclusion(argument) for argument in arguments)))
     pattern = escape_pattern(pattern, arguments)
+    recursion_patterns: dict[str, SyntaxPattern] = {}
 
     for index, argument_name in enumerate(argument_names, start=1):
         if not argument_name:

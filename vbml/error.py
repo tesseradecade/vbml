@@ -1,5 +1,7 @@
 class VBMLError(BaseException):
-    pass
+    def __init__(self, message: str, /) -> None:
+        super().__init__(message)
+        self.message = message
 
 
 class PatternError(VBMLError):
